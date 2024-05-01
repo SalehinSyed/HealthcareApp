@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
 
-function App() {
+import QuestionnaireForm from "./components/QuestionnaireForm";
+import React from "react";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="mt-4">
+      <img
+        alt="Company Logo"
+        src="/logo.png"
+        className="mx-auto"
+        style={{ width: "100px", height: "100px" }}
+      />
+      <h1 className="text-3xl text-center font-bold my-4">
+        Welcome to the Blinx Health Survey
+      </h1>
+      <QuestionnaireForm />
     </div>
   );
-}
+};
 
 export default App;
