@@ -1,16 +1,24 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 
 import QuestionnaireForm from "../QuestionnaireForm";
 import React from "react";
+import { submitQuestionnaire } from "../../services/apiService";
+import userEvent from "@testing-library/user-event";
+
+// Mock the submitQuestionnaire function to resolve successfully
+jest.mock("../../services/apiService", () => ({
+  submitQuestionnaire: jest.fn(),
+}));
+
+const mockSubmitQuestionnaire = submitQuestionnaire as jest.Mock;
 
 describe("Questionnaire Form", () => {
-  afterEach(cleanup);
+  beforeEach(() => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+  });
+
+  // Test if the form renders all the fields correctly
   it("renders initial form fields correctly", () => {
     render(<QuestionnaireForm />);
     expect(screen.getByLabelText(/Name:/i)).toBeInTheDocument();
@@ -23,15 +31,15 @@ describe("Questionnaire Form", () => {
       )
     ).toBeInTheDocument();
   });
-});
 
-describe("Form Submission", () => {
-  test("form validation messages for incomplete form", async () => {
+  // Test if the form shows validation messages for incomplete form
+  it("shows validation messages for incomplete form", async () => {
     render(<QuestionnaireForm />);
 
-    const submitButton = screen.getByRole("button", { name: /submit/i });
-    fireEvent.click(submitButton);
+    // Submit the form
+    userEvent.click(screen.getByText("Submit"));
 
+    // Check for validation messages
     await waitFor(() => {
       expect(screen.getByText(/name is required/i)).toBeInTheDocument();
     });
@@ -44,6 +52,146 @@ describe("Form Submission", () => {
     await waitFor(() => {
       expect(
         screen.getByText(/health condition is required/i)
+      ).toBeInTheDocument();
+    });
+  });
+
+  // Test if the form shows 'Submitting..' in submit button when form is being submitted
+  it("shows 'Submitting..' in submit button when form is being submitted", async () => {
+    render(<QuestionnaireForm />);
+
+    // Fill out the form fields
+    userEvent.type(screen.getByLabelText(/Name:/i), "John Doe");
+    userEvent.type(screen.getByLabelText(/Age:/i), "30");
+    userEvent.selectOptions(screen.getByLabelText(/Gender:/i), ["male"]);
+    userEvent.selectOptions(screen.getByLabelText(/Health Condition:/i), [
+      "healthy",
+    ]);
+    userEvent.click(screen.getByRole("radio", { name: /No/i }));
+
+    // Submit the form
+    userEvent.click(screen.getByText("Submit"));
+
+    // Check if the success message is displayed
+    await waitFor(
+      () => {
+        expect(screen.getByText(/Submitting../i)).toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
+  });
+
+  // Test if the form submits successfully and shows a success message
+  it("submits the form successfully and shows a success message", async () => {
+    mockSubmitQuestionnaire.mockResolvedValueOnce({
+      message: "Thank you for taking the survey!",
+    });
+    render(<QuestionnaireForm />);
+
+    // Fill out the form fields
+    userEvent.type(screen.getByLabelText(/Name:/i), "John Doe");
+    userEvent.type(screen.getByLabelText(/Age:/i), "30");
+    userEvent.selectOptions(screen.getByLabelText(/Gender:/i), ["male"]);
+    userEvent.selectOptions(screen.getByLabelText(/Health Condition:/i), [
+      "healthy",
+    ]);
+    userEvent.click(screen.getByRole("radio", { name: /No/i }));
+
+    // Submit the form
+    userEvent.click(screen.getByText("Submit"));
+
+    // Wait for the expected outcome
+    await waitFor(() => {
+      expect(submitQuestionnaire).toHaveBeenCalledWith({
+        name: "John Doe",
+        age: 30,
+        gender: "male",
+        health_condition: "healthy",
+        symptoms_present: false,
+        symptoms_list: undefined,
+        chronicDetails: undefined,
+      });
+    });
+
+    // Check for the success message
+    expect(
+      screen.getByText("Thank you for taking the survey!")
+    ).toBeInTheDocument();
+  });
+
+  // Test if the form resets the form fields after a successful submission
+  it("resets the form fields after a successful submission", async () => {
+    // Mock the submitQuestionnaire function to resolve successfully
+    mockSubmitQuestionnaire.mockResolvedValueOnce({
+      message: "Thank you for taking the survey!",
+    });
+
+    render(<QuestionnaireForm />);
+
+    // Fill out the form fields
+    userEvent.type(screen.getByLabelText(/Name:/i), "John Doe");
+    userEvent.type(screen.getByLabelText(/Age:/i), "30");
+    userEvent.selectOptions(screen.getByLabelText(/Gender:/i), ["male"]);
+    userEvent.selectOptions(screen.getByLabelText(/Health Condition:/i), [
+      "healthy",
+    ]);
+    userEvent.click(screen.getByRole("radio", { name: /No/i }));
+
+    // Check if the radio input for symptoms is checked
+    expect(screen.getByRole("radio", { name: /No/i })).toBeChecked();
+
+    // Submit the form
+    userEvent.click(screen.getByText("Submit"));
+
+    // Wait for the success message to be displayed
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Thank you for taking the survey!/i)
+      ).toBeInTheDocument();
+    });
+
+    // Click the "Submit another response" button
+    userEvent.click(
+      screen.getByRole("button", { name: /Submit another response/i })
+    );
+
+    // Check if the form fields are reset
+    expect(screen.getByLabelText(/Name:/i)).toHaveValue("");
+    expect(screen.getByLabelText(/Age:/i)).toHaveValue(null);
+    expect(screen.getByLabelText(/Gender:/i)).toHaveValue("");
+    expect(screen.getByLabelText(/Health Condition:/i)).toHaveValue("");
+    expect(
+      screen.getByLabelText(
+        /Have you experienced any symptoms in the last 14 days/i
+      )
+    ).not.toBeChecked();
+  });
+
+  // Test if the form shows an error message when the form submission fails
+  it("shows an error message when the form submission fails", async () => {
+    // Mock the submitQuestionnaire function to reject with an error
+    mockSubmitQuestionnaire.mockRejectedValueOnce(new Error("Network error"));
+
+    render(<QuestionnaireForm />);
+
+    // Fill out the form fields
+    userEvent.type(screen.getByLabelText(/Name:/i), "John Doe");
+    userEvent.type(screen.getByLabelText(/Age:/i), "30");
+    userEvent.selectOptions(screen.getByLabelText(/Gender:/i), ["male"]);
+    userEvent.selectOptions(screen.getByLabelText(/Health Condition:/i), [
+      "healthy",
+    ]);
+    userEvent.click(screen.getByRole("radio", { name: /No/i }));
+
+    // Submit the form
+    userEvent.click(screen.getByText("Submit"));
+
+    // Check if the error message is displayed
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          /Failed to submit the questionnaire. Please try again./i
+        )
       ).toBeInTheDocument();
     });
   });
