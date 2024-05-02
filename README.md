@@ -1,6 +1,6 @@
 # Healthcare App
 
-Welcome to the Blinx Health Survey, a streamlined application designed to gather and manage health-related information efficiently. This application is built using React with TypeScript, leveraging the robustness of React Hook Form and the utility-first styling of Tailwind CSS to deliver a responsive and user-friendly interface.
+Healthcare application, a streamlined application designed to gather and manage health-related information efficiently. This application is built using React with TypeScript, leveraging the robustness of React Hook Form and the utility-first styling of Tailwind CSS to deliver a responsive and user-friendly interface.
 
 ## Key Features
 
@@ -20,15 +20,21 @@ Before you begin, ensure you have Node.js and npm installed on your system. You 
 
 1. Clone the Repository
 
-   `git clone https://github.com/SalehinSyed/HealthcareApp`
+   ```bash
+   git clone https://github.com/SalehinSyed/HealthcareApp
+   ```
 
 3. Install Dependencies
 
-   `npm install`
+   ```bash
+   npm install
+   ```
 
 5. Start the Development Server
 
-   `npm start`
+   ```bash
+   npm start
+   ```
 
 This runs the app in development mode. Open http://localhost:3000 to view it in your browser. The page will reload if you make edits.
 
@@ -36,7 +42,9 @@ This runs the app in development mode. Open http://localhost:3000 to view it in 
 
 To run tests, use the following command:
 
-   `npm test`
+   ```bash
+   npm test
+   ```
 
 Executes the test runner in the interactive watch mode. For more information, see the section about running tests in the Create React App documentation.
 
@@ -46,6 +54,8 @@ This launches the test runner in the interactive watch mode.
 
 To build the app for production, use:
  
-   `npm run build`
+   ```bash 
+   npm run build
+   ```
 
 This command builds the app to the build folder, optimizing the build for the best performance.
