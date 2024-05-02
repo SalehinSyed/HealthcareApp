@@ -1,13 +1,18 @@
 import "./QuestionnaireForm.css";
 
 import { FormValues, formSchema } from "../schema/formSchema";
+import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import React from "react";
 import { submitQuestionnaire } from "../services/apiService";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+/**
+ * QuestionnaireForm component
+ * This component renders the questionnaire form and handles form submission
+ */
 export default function QuestionnaireForm() {
+  // Initialize react-hook-form with form schema and default values
   const {
     register,
     handleSubmit,
@@ -20,16 +25,24 @@ export default function QuestionnaireForm() {
     resolver: zodResolver(formSchema),
     mode: "onSubmit",
     defaultValues: {
-      age: undefined, // Set undefined to handle required validation
-      symptomsPresent: undefined, // Ensure this is also undefined initially to trigger validation
+      age: undefined,
+      symptomsPresent: undefined,
     },
   });
 
+  /**
+   * Reset form fields and submission state
+   */
   const handleReset = () => {
     reset(); // Reset form fields and submission state
   };
 
+  /**
+   * Handle form submission
+   * @param FormValues data - The data from the form
+   */
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    // Prepare data for submission
     const submissionData = {
       name: data.name,
       age: data.age,
@@ -46,10 +59,13 @@ export default function QuestionnaireForm() {
           : undefined,
     };
 
+    // Submit data and handle potential errors
     try {
       await submitQuestionnaire(submissionData);
     } catch (error) {
-      setError("root", { message: "Oops, something went wrong :(" });
+      setError("root", {
+        message: "Failed to submit the questionnaire. Please try again.",
+      });
     }
   };
 
@@ -57,11 +73,14 @@ export default function QuestionnaireForm() {
   const symptomsPresent = watch("symptomsPresent");
   const healthCondition = watch("healthCondition");
 
-  React.useEffect(() => {
+  // Trigger validation whenever healthCondition changes
+
+  useEffect(() => {
     // Trigger validation whenever healthCondition changes
     trigger("chronicDetails");
   }, [healthCondition, trigger]);
 
+  // Render success message if submission was successful
   if (isSubmitSuccessful) {
     return (
       <div className="max-w-xl m-auto p-4 my-6 shadow-md bg-white rounded-lg text-center">
@@ -78,6 +97,7 @@ export default function QuestionnaireForm() {
     );
   }
 
+  // Render form
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}

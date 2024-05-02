@@ -1,3 +1,17 @@
+/**
+ * Importing Tailwind's base styles
+ * This injects Normalize.css and any additional base styles you configure in your tailwind.config.js file
+ */
 @tailwind base;
+
+/**
+ * Importing Tailwind's component classes
+ * This injects any component classes registered by plugins and any you've added to your tailwind.config.js file
+ */
 @tailwind components;
+
+/**
+ * Importing Tailwind's utility classes
+ * This injects all of Tailwind's utility classes, generated based on your tailwind.config.js file
+ */
 @tailwind utilities;
