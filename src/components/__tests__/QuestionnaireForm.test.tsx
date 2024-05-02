@@ -195,4 +195,60 @@ describe("Questionnaire Form", () => {
       ).toBeInTheDocument();
     });
   });
+
+  // Test check if the 'Chronic Condition Details' field is rendered when health condition is 'Chronic illness'
+  it("renders the 'Chronic Condition Details' field when health condition is 'Chronic illness'", () => {
+    render(<QuestionnaireForm />);
+
+    // Select "Chronic illness" for the health condition
+    userEvent.selectOptions(screen.getByLabelText(/Health Condition:/i), [
+      "Chronic illness",
+    ]);
+
+    // Check if the "Chronic Condition Details" field is rendered
+    expect(
+      screen.getByLabelText(/Chronic Condition Details:/i)
+    ).toBeInTheDocument();
+
+    // Check if Medication field is rendered
+    expect(screen.getByLabelText(/Medication:/i)).toBeInTheDocument();
+  });
+
+  it("renders the 'List symptoms experienced:' field when 'Have you experienced any symptoms in the last 14 days?' is 'Yes'", () => {
+    render(<QuestionnaireForm />);
+
+    // Select "Yes" for the "Have you experienced any symptoms in the last 14 days?" question
+    userEvent.click(screen.getByRole("radio", { name: /Yes/i }));
+
+    // Check if the "List symptoms experienced:" field is rendered
+    expect(
+      screen.getByLabelText(/List symptoms experienced:/i)
+    ).toBeInTheDocument();
+  });
+
+  // Test if the conditional fields are not rendered when they are not applicable
+  it("does not render the conditional fields when they are not applicable", () => {
+    render(<QuestionnaireForm />);
+
+    // Select "Healthy" for the health condition
+    userEvent.selectOptions(screen.getByLabelText(/Health Condition:/i), [
+      "Healthy",
+    ]);
+
+    // Select "No" for the "Have you experienced any symptoms in the last 14 days?" question
+    userEvent.click(screen.getByRole("radio", { name: /No/i }));
+
+    // Check that the "Chronic Condition Details" field is not rendered
+    expect(
+      screen.queryByLabelText(/Chronic Condition Details:/i)
+    ).not.toBeInTheDocument();
+
+    // Check that the "Medication" field is not rendered
+    expect(screen.queryByLabelText(/Medication:/i)).not.toBeInTheDocument();
+
+    // Check that the "List symptoms experienced:" field is not rendered
+    expect(
+      screen.queryByLabelText(/List symptoms experienced:/i)
+    ).not.toBeInTheDocument();
+  });
 });
