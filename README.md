@@ -19,28 +19,33 @@ Before you begin, ensure you have Node.js and npm installed on your system. You 
 ### Setup Instructions
 
 1. Clone the Repository
+
    `git clone https://github.com/SalehinSyed/HealthcareApp`
 
-2. Install Dependencies
+3. Install Dependencies
+
    `npm install`
 
-3. Start the Development Server
+5. Start the Development Server
+
    `npm start`
 
 This runs the app in development mode. Open http://localhost:3000 to view it in your browser. The page will reload if you make edits.
 
-Running Tests
+## Running Tests
 
 To run tests, use the following command:
- `npm test`
+
+   `npm test`
 
 Executes the test runner in the interactive watch mode. For more information, see the section about running tests in the Create React App documentation.
 
 This launches the test runner in the interactive watch mode.
 
-Building for Production
+## Building for Production
 
 To build the app for production, use:
- `npm run build`
+ 
+   `npm run build`
 
 This command builds the app to the build folder, optimizing the build for the best performance.
