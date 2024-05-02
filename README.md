@@ -1,47 +1,48 @@
-# Getting Started with Create React App
+# Healthcare App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the Blinx Health Survey, a streamlined application designed to gather and manage health-related information efficiently. This application is built using React with TypeScript, leveraging the robustness of React Hook Form and the utility-first styling of Tailwind CSS to deliver a responsive and user-friendly interface.
 
-## Available Scripts
+## Key Features
 
-In the project directory, you can run:
+- **Dynamic Health Surveys:** Users can fill out a questionnaire based on their current health condition, with questions dynamically adjusting based on previous answers (e.g., showing additional fields if a chronic condition is selected).
+- **Real-Time Validation:** Forms are validated in real-time using React Hook Form to ensure all data entered is accurate before submission, reducing the likelihood of errors and incomplete entries.
+- **Responsive Design:** Tailwind CSS ensures that the survey is accessible and visually coherent across all devices and screen sizes.
 
-### `npm start`
+## Local Development
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). Follow these instructions to set up and run the project locally.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+Before you begin, ensure you have Node.js and npm installed on your system. You can download and install them from [Node.js official website](https://nodejs.org/).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Setup Instructions
 
-### `npm run build`
+1. Clone the Repository
+   `git clone https://github.com/SalehinSyed/HealthcareApp`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Install Dependencies
+   `npm install`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Start the Development Server
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`npm start`
 
-### `npm run eject`
+This runs the app in development mode. Open http://localhost:3000 to view it in your browser. The page will reload if you make edits.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Running Tests
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To run tests, use the following command:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+`npm test`
+Executes the test runner in the interactive watch mode. For more information, see the section about running tests in the Create React App documentation.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+This launches the test runner in the interactive watch mode.
 
-## Learn More
+Building for Production
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To build the app for production, use:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-# HealthcareApp
+`npm run build`
+
+This command builds the app to the build folder, optimizing the build for the best performance.
